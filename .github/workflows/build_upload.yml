@@ -1,0 +1,81 @@
+name: Build and upload
+
+on:
+  # TODO commemted out
+  # push:
+  workflow_dispatch:
+
+# Allow one concurrent deployment
+concurrency:
+  group: environment-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Remove old files and folders
+        run: |
+          rm -rf yarn.lock
+          rm -rf package-lock.json
+          rm -rf dist
+          rm -rf js/modules
+          mkdir js/modules
+
+      - name: install node v20
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Install npm
+        run: npm install
+
+      - name: Prettier
+        run: npm exec -- prettier --write src
+
+      - name: Compile TypeScript
+        run: |
+          set -e
+          rm -rf dist
+          NODE_ENV=production npm exec -- tsc
+          NODE_ENV=production npm exec -- rollup -c
+
+      - name: Copy build artifact
+        run: |
+          cp dist/web/*.js js/modules/
+
+      - name: Commit Distribution Files
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: "Github Action: Updated dist files"
+
+      - name: Publish to NPM registry
+        uses: JS-DevTools/npm-publish@v3
+        with:
+          registry: https://registry.npmjs.org/
+          token: ${{ secrets.NPM_TOKEN }}
+          strategy: all
+          
+      - name: Setup Pages
+        uses: actions/configure-pages@v4
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: "."
+
+  # deploy:
+  #   needs: build
+  #   environment:
+  #     name: github-pages
+  #     url: ${{ steps.deployment.outputs.page_url }}
+  #   runs-on: ubuntu-latest
+  #   permissions:
+  #     contents: read
+  #     pages: write
+  #     id-token: write
+  #   steps:
+  #     - name: Deploy to GitHub Pages
+  #       id: deployment
+  #       uses: actions/deploy-pages@v4

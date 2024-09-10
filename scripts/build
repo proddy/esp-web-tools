@@ -1,0 +1,14 @@
+#!/bin/sh
+
+# Stop on errors
+set -e
+
+cd "$(dirname "$0")/.."
+
+rm -rf dist
+rm -f js/modules/*
+
+NODE_ENV=production npm exec -- tsc
+NODE_ENV=production npm exec -- rollup -c
+
+cp dist/web/*.js js/modules/

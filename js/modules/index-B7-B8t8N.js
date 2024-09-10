@@ -1,10 +1,4 @@
-import { LitElement, html, css, svg } from "lit";
-import { customElement } from "lit/decorators.js";
-import "../components/ewt-dialog";
-import "../components/ewt-button";
-import { dialogStyles } from "../styles";
-
-const cloudDownload = svg`
+import{D as e,f as t,_ as o,s as l,x as i,k as a,C as n}from"./styles-CyHT93Ex.js";const s=n`
   <svg
     version="1.1"
     id="Capa_1"
@@ -23,14 +17,7 @@ const cloudDownload = svg`
       />
     </g>
   </svg>
-`;
-
-@customElement("ewt-no-port-picked-dialog")
-class EwtNoPortPickedDialog extends LitElement {
-  public doTryAgain?: () => void;
-
-  public render() {
-    return html`
+`;let r=class extends l{render(){return i`
       <ewt-dialog
         open
         heading="No port selected"
@@ -82,7 +69,7 @@ class EwtNoPortPickedDialog extends LitElement {
                   >Mac</a
                 >
                 <br />
-                (download via blue button with ${cloudDownload} icon)
+                (download via blue button with ${s} icon)
               </li>
               <li>
                 CH340, CH341 drivers:
@@ -99,7 +86,7 @@ class EwtNoPortPickedDialog extends LitElement {
                   >Mac</a
                 >
                 <br />
-                (download via blue button with ${cloudDownload} icon)
+                (download via blue button with ${s} icon)
               </li>
             </ul>
           </li>
@@ -113,8 +100,7 @@ class EwtNoPortPickedDialog extends LitElement {
             access.
           </li>
         </ol>
-        ${this.doTryAgain
-          ? html`
+        ${this.doTryAgain?i`
               <ewt-button
                 slot="primaryAction"
                 dialogAction="close"
@@ -128,8 +114,7 @@ class EwtNoPortPickedDialog extends LitElement {
                 dialogAction="close"
                 label="Cancel"
               ></ewt-button>
-            `
-          : html`
+            `:i`
               <ewt-button
                 slot="primaryAction"
                 dialogAction="close"
@@ -137,16 +122,7 @@ class EwtNoPortPickedDialog extends LitElement {
               ></ewt-button>
             `}
       </ewt-dialog>
-    `;
-  }
-
-  private async _handleClose() {
-    this.parentNode!.removeChild(this);
-  }
-
-  static styles = [
-    dialogStyles,
-    css`
+    `}async _handleClose(){this.parentNode.removeChild(this)}};r.styles=[e,t`
       li + li,
       li > ul {
         margin-top: 8px;
@@ -156,12 +132,4 @@ class EwtNoPortPickedDialog extends LitElement {
         margin-bottom: 0;
         padding-left: 1.5em;
       }
-    `,
-  ];
-}
-
-declare global {
-  interface HTMLElementTagNameMap {
-    "ewt-no-port-picked-dialog": EwtNoPortPickedDialog;
-  }
-}
+    `],r=o([a("ewt-no-port-picked-dialog")],r);const c=async e=>{const t=document.createElement("ewt-no-port-picked-dialog");return t.doTryAgain=e,document.body.append(t),!0};export{c as openNoPortPickedDialog};
