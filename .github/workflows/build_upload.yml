@@ -32,10 +32,7 @@ jobs:
         run: corepack enable
 
       - name: Install yarn
-        run: yarn
-
-      - name: Prettier
-        run: npm exec -- prettier --write src
+        run: yarn install
 
       - name: Compile TypeScript
         run: |

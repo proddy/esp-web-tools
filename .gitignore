@@ -1,12 +1,5 @@
 node_modules
 dist
-
-.pnp.*
-*/.yarn/*
-!.yarn/patches
-!.yarn/plugins
-!.yarn/releases
-!.yarn/sdks
-!.yarn/versions
-yarn.lock
-.yarn/install-state.gz
+js
+js/modules
+.yarn
