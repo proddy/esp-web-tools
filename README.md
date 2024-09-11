@@ -1,5 +1,3 @@
 # EMS-ESP Web Tools
 
-## Development
-
-Run `yarn dev`. This starts a server on <http://localhost:5001>.
+Fork of <https://esphome.github.io/esp-web-tools/> customized for the EMS-ESP project
