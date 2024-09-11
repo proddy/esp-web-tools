@@ -230,7 +230,7 @@ export class EwtInstallDialog extends LitElement {
     return [heading, content, hideActions, allowClosing];
   }
   _renderDashboardNoImprov(): [string, TemplateResult, boolean, boolean] {
-    const heading = 'Choose an action';
+    const heading = 'EMS Gateway model ' + this._manifest.name;
     let content: TemplateResult;
     let hideActions = true;
     let allowClosing = true;
@@ -240,7 +240,7 @@ export class EwtInstallDialog extends LitElement {
         <div>
           <ewt-button
             text-left
-            .label=${`Install on a model ${this._manifest.name}`}
+            label="Install Firmware"
             @click=${() => {
               if (this._manifest.new_install_prompt_erase) {
                 this._state = 'ASK_ERASE';
@@ -256,7 +256,7 @@ export class EwtInstallDialog extends LitElement {
 
         <div>
           <ewt-button
-            label="Console"
+            label="Open Console"
             @click=${async () => {
               // Also set `null` back to undefined.
               this._client = undefined;
@@ -456,7 +456,7 @@ export class EwtInstallDialog extends LitElement {
       const action = isUpdate ? 'update to' : 'install';
       content = html`
         ${isUpdate ? html`Your device is running ${this._info!.firmware}&nbsp;${this._info!.version}.<br /><br />` : ''}
-        Are you sure you want to ${action} version ${this._manifest.version}?
+        Are you sure you want to ${action} firmware version ${this._manifest.version}?
         ${this._installErase ? html`<br /><br />Settings will not be erased.` : ''}
         <ewt-button slot="primaryAction" label="Install" @click=${this._confirmInstall}></ewt-button>
         <ewt-button
