@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "Web tools for EMS-ESP",
   "main": "dist/install-button.js",
-  "repository": "https://github.com/emsesp/esp-web-tools",
+  "repository": "https://github.com/emsesp/emsesp-web-tools",
   "author": "ESPHome maintainers & Jason2866 & emsesp",
   "license": "Apache-2.0",
   "scripts": {
