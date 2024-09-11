@@ -23,7 +23,7 @@ jobs:
           # rm -rf package-lock.json
           # rm -rf dist
           # rm -rf js/modules
-          mkdir js/modules
+          # mkdir js/modules
 
       - name: install node v20
         uses: actions/setup-node@v4
@@ -45,6 +45,8 @@ jobs:
 
       - name: Copy build artifact
         run: |
+          mkdir js
+          mkdir js/modules
           cp dist/web/*.js js/modules/
 
       - name: Commit Distribution Files
