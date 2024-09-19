@@ -1,6 +1,6 @@
 {
   "name": "emsesp-web-tools",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Web tools for EMS-ESP",
   "main": "dist/install-button.js",
   "repository": "https://github.com/emsesp/emsesp-web-tools",
