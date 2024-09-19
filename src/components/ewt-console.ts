@@ -1,7 +1,7 @@
-import { ColoredConsole, coloredConsoleStyles } from "../util/console-color";
-import { sleep } from "../util/sleep";
-import { LineBreakTransformer } from "../util/line-break-transformer";
-import { Logger } from "../const";
+import { ColoredConsole, coloredConsoleStyles } from '../util/console-color';
+import { sleep } from '../util/sleep';
+import { LineBreakTransformer } from '../util/line-break-transformer';
+import { Logger } from '../const';
 
 export class EwtConsole extends HTMLElement {
   public port!: SerialPort;
@@ -12,14 +12,14 @@ export class EwtConsole extends HTMLElement {
   private _cancelConnection?: () => Promise<void>;
 
   public logs(): string {
-    return this._console?.logs() || "";
+    return this._console?.logs() || '';
   }
 
   public connectedCallback() {
     if (this._console) {
       return;
     }
-    const shadowRoot = this.attachShadow({ mode: "open" });
+    const shadowRoot = this.attachShadow({ mode: 'open' });
 
     shadowRoot.innerHTML = `
       <style>
@@ -54,24 +54,31 @@ export class EwtConsole extends HTMLElement {
                 <input autofocus>
               </form>
             `
-          : ""
+          : ''
       }
     `;
 
-    this._console = new ColoredConsole(this.shadowRoot!.querySelector("div")!);
+    this._console = new ColoredConsole(this.shadowRoot!.querySelector('div')!);
 
     if (this.allowInput) {
-      const input = this.shadowRoot!.querySelector("input")!;
+      const input = this.shadowRoot!.querySelector('input')!;
 
-      this.addEventListener("click", () => {
+      this.addEventListener('click', () => {
         // Only focus input if user didn't select some text
-        if (getSelection()?.toString() === "") {
+        if (getSelection()?.toString() === '') {
           input.focus();
         }
       });
 
-      input.addEventListener("keydown", (ev) => {
-        if (ev.key === "Enter") {
+      input.addEventListener('keydown', (ev) => {
+        // added for EMS-ESP. Capture CTRL-C
+        if (ev.key === 'c' && ev.ctrlKey) {
+          ev.preventDefault();
+          ev.stopPropagation();
+          this._sendCommand_ctrlC();
+        }
+
+        if (ev.key === 'Enter') {
           ev.preventDefault();
           ev.stopPropagation();
           this._sendCommand();
@@ -88,48 +95,60 @@ export class EwtConsole extends HTMLElement {
   }
 
   private async _connect(abortSignal: AbortSignal) {
-    this.logger.debug("Starting console read loop");
+    this.logger.debug('Starting console read loop');
     try {
       await this.port
         .readable!.pipeThrough(new TextDecoderStream(), {
-          signal: abortSignal,
+          signal: abortSignal
         })
         .pipeThrough(new TransformStream(new LineBreakTransformer()))
         .pipeTo(
           new WritableStream({
             write: (chunk) => {
-              this._console!.addLine(chunk.replace("\r", ""));
-            },
-          }),
+              this._console!.addLine(chunk.replace('\r', ''));
+            }
+          })
         );
       if (!abortSignal.aborted) {
-        this._console!.addLine("");
-        this._console!.addLine("");
-        this._console!.addLine("Terminal disconnected");
+        this._console!.addLine('');
+        this._console!.addLine('');
+        this._console!.addLine('Terminal disconnected');
       }
     } catch (e) {
-      this._console!.addLine("");
-      this._console!.addLine("");
+      this._console!.addLine('');
+      this._console!.addLine('');
       this._console!.addLine(`Terminal disconnected: ${e}`);
     } finally {
       await sleep(100);
-      this.logger.debug("Finished console read loop");
+      this.logger.debug('Finished console read loop');
+    }
+  }
+
+  // added for EMS-ESP. CTRL-C opens the console
+  private async _sendCommand_ctrlC() {
+    const encoder = new TextEncoder();
+    const writer = this.port.writable!.getWriter();
+    await writer.write(encoder.encode('\x03'));
+    try {
+      writer.releaseLock();
+    } catch (err) {
+      console.error('Ignoring release lock error', err);
     }
   }
 
   private async _sendCommand() {
-    const input = this.shadowRoot!.querySelector("input")!;
+    const input = this.shadowRoot!.querySelector('input')!;
     const command = input.value;
     const encoder = new TextEncoder();
     const writer = this.port.writable!.getWriter();
-    await writer.write(encoder.encode(command + "\r\n"));
+    await writer.write(encoder.encode(command + '\r\n'));
     this._console!.addLine(`> ${command}\r\n`);
-    input.value = "";
+    input.value = '';
     input.focus();
     try {
       writer.releaseLock();
     } catch (err) {
-      console.error("Ignoring release lock error", err);
+      console.error('Ignoring release lock error', err);
     }
   }
 
@@ -141,23 +160,23 @@ export class EwtConsole extends HTMLElement {
   }
 
   public async reset() {
-    this.logger.debug("Triggering reset.");
+    this.logger.debug('Triggering reset.');
     await this.port.setSignals({
       dataTerminalReady: false,
-      requestToSend: true,
+      requestToSend: true
     });
     await this.port.setSignals({
       dataTerminalReady: false,
-      requestToSend: false,
+      requestToSend: false
     });
     await new Promise((resolve) => setTimeout(resolve, 1000));
   }
 }
 
-customElements.define("ewt-console", EwtConsole);
+customElements.define('ewt-console', EwtConsole);
 
 declare global {
   interface HTMLElementTagNameMap {
-    "ewt-console": EwtConsole;
+    'ewt-console': EwtConsole;
   }
 }
