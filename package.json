@@ -19,7 +19,7 @@
     "@rollup/plugin-typescript": "^11.1.6",
     "@types/w3c-web-serial": "^1.0.6",
     "prettier": "^3.3.3",
-    "rollup": "^4.21.2",
+    "rollup": "^4.22.2",
     "serve": "^14.2.3",
     "typescript": "^5.6.2"
   },
@@ -37,5 +37,5 @@
     "tasmota-webserial-esptool": "^6.2.0",
     "tslib": "^2.7.0"
   },
-  "packageManager": "yarn@4.4.1"
+  "packageManager": "yarn@4.5.0"
 }
