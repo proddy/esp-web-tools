@@ -14,17 +14,17 @@
     "@babel/plugin-proposal-class-properties": "^7.18.6",
     "@rollup/plugin-babel": "^6.0.4",
     "@rollup/plugin-json": "^6.1.0",
-    "@rollup/plugin-node-resolve": "^15.3.0",
+    "@rollup/plugin-node-resolve": "^16.0.0",
     "@rollup/plugin-terser": "^0.4.4",
-    "@rollup/plugin-typescript": "^12.1.1",
+    "@rollup/plugin-typescript": "^12.1.2",
     "@types/w3c-web-serial": "^1.0.7",
-    "prettier": "^3.3.3",
-    "rollup": "^4.24.0",
+    "prettier": "^3.4.2",
+    "rollup": "^4.29.1",
     "serve": "^14.2.4",
-    "typescript": "^5.6.3"
+    "typescript": "^5.7.2"
   },
   "dependencies": {
-    "@babel/core": "^7.25.9",
+    "@babel/core": "^7.26.0",
     "@material/mwc-button": "^0.27.0",
     "@material/mwc-checkbox": "^0.27.0",
     "@material/mwc-circular-progress": "^0.27.0",
@@ -35,7 +35,7 @@
     "improv-wifi-serial-sdk": "^2.5.0",
     "lit": "2.8.0",
     "tasmota-webserial-esptool": "^6.2.0",
-    "tslib": "^2.8.0"
+    "tslib": "^2.8.1"
   },
-  "packageManager": "yarn@4.5.0"
+  "packageManager": "yarn@4.6.0"
 }
